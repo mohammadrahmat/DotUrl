@@ -25,6 +25,11 @@ namespace DotUrl.Actions
 
             parsedInput.Response = Util.DeeplinkGenerator(parsedInput);
 
+            if (parsedInput.HasError)
+            {
+                return parsedInput.ErrorDetails;
+            }
+
             return parsedInput.Response;
         }
 
@@ -34,19 +39,19 @@ namespace DotUrl.Actions
 
             if (_productPattern.Match(input).Success)
             {
-                return ParseProductUrl(uri);
+                return ParseProductPageInput(uri);
             } 
             else if (_searchPattern.Match(input).Success)
             {
-                return ParseSearchUrl(uri);
+                return ParseSearchPageInput(uri);
             }
             else
             {
-                return ParseOtherUrl(uri);
+                return ParseOtherPageInput(uri);
             }
         }
 
-        public UrlServiceModel ParseOtherUrl(Uri uri)
+        public UrlServiceModel ParseOtherPageInput(Uri uri)
         {
 
             return new UrlServiceModel
@@ -59,7 +64,7 @@ namespace DotUrl.Actions
             };
         }
 
-        public UrlServiceModel ParseSearchUrl(Uri uri)
+        public UrlServiceModel ParseSearchPageInput(Uri uri)
         {
             var parsedModel = new UrlServiceModel
             {
@@ -90,7 +95,7 @@ namespace DotUrl.Actions
             return parsedModel;
         }
 
-        public UrlServiceModel ParseProductUrl(Uri uri)
+        public UrlServiceModel ParseProductPageInput(Uri uri)
         {
             var parsedModel = new UrlServiceModel 
             { 
@@ -133,7 +138,7 @@ namespace DotUrl.Actions
             if (Uri.IsWellFormedUriString(input, UriKind.Absolute))
             {
                 var uri = new Uri(input);
-                return string.Equals(uri.Authority, Constants.DOMAIN, StringComparison.OrdinalIgnoreCase);
+                return string.Equals(uri.Authority, Constants.URL_DOMAIN, StringComparison.OrdinalIgnoreCase);
             }
 
             return false;

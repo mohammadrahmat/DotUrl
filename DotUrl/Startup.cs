@@ -32,6 +32,7 @@ namespace DotUrl
             services.AddControllers();
             services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = "DotUrlApi", Version = "v1" }));
             services.AddTransient<IAction<UrlServiceModel>, UrlAction>();
+            services.AddTransient<IAction<DeeplinkServiceModel>, DeeplinkAction>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

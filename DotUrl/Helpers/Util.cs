@@ -56,5 +56,31 @@ namespace DotUrl.Helpers
                     throw new ArgumentException($"Unknown Page Type: {url.PageType}");
             }
         }
+
+        public static string UrlGenerator(DeeplinkServiceModel deeplink)
+        {
+            switch(deeplink.PageType)
+            {
+                case PageType.Other:
+                    return Constants.URL_HOME_TEMPLATE;
+                case PageType.Search:
+                    return string.Format(Constants.URL_SEARCH_TEMPLATE, deeplink.SearchQuery);
+                case PageType.Product:
+                    var url = string.Format(Constants.URL_PRODUCT_TEMPLATE, deeplink.ContentId);
+                    var seperatorFlag = "?";
+                    if (deeplink.CampaignId > 0)
+                    {
+                        url = $"{url}{seperatorFlag}{string.Format(Constants.URL_BOUTIQUE_TEMPLATE, deeplink.CampaignId)}";
+                        seperatorFlag = "&";
+                    }
+                    if (deeplink.MerchantId > 0)
+                    {
+                        url = $"{url}{seperatorFlag}{string.Format(Constants.URL_MERCHANT_TEMPLATE, deeplink.MerchantId)}";
+                    }
+                    return url;
+                default:
+                    throw new ArgumentException($"Unknown Page Type: {deeplink.PageType}");
+            }
+        }
     }
 }

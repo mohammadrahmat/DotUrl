@@ -13,18 +13,18 @@ namespace UrlDot.Tests
     public class UrlServiceTest
     {
         private readonly IAction<UrlServiceModel> _action;
-        private readonly UrlServiceController _urlServiceController;
+        private readonly UrlServiceController _controller;
 
         public UrlServiceTest()
         {
             _action = new UrlAction();
-            _urlServiceController = new UrlServiceController(_action);
+            _controller = new UrlServiceController(_action);
         }
 
         [Fact]
         public void Status_ShouldReturnOk()
         {
-            var resp = _urlServiceController.Status();
+            var resp = _controller.Status();
 
             Assert.IsType<OkResult>(resp);
         }
@@ -62,7 +62,7 @@ namespace UrlDot.Tests
         [SampleUrlServiceTestData]
         public void ConvertToDeepLink_ShouldReturnDeepLink(string url, string deeplink)
         {
-            var resp = _urlServiceController.ConvertToDeeplink(url);
+            var resp = _controller.ConvertToDeeplink(url);
             Assert.Equal(resp, deeplink);
         }
 
@@ -81,7 +81,7 @@ namespace UrlDot.Tests
         {
             var uri = new Uri(url);
 
-            var resp = _action.ParseProductUrl(uri);
+            var resp = _action.ParseProductPageInput(uri);
 
             Assert.False(resp.HasError);
         }
@@ -92,7 +92,7 @@ namespace UrlDot.Tests
         {
             var uri = new Uri(url);
 
-            var resp = _action.ParseProductUrl(uri);
+            var resp = _action.ParseProductPageInput(uri);
 
             Assert.True(resp.HasError);
         }
@@ -103,7 +103,7 @@ namespace UrlDot.Tests
         {
             var uri = new Uri(url);
 
-            var resp = _action.ParseSearchUrl(uri);
+            var resp = _action.ParseSearchPageInput(uri);
 
             Assert.False(resp.HasError);
         }
@@ -114,7 +114,7 @@ namespace UrlDot.Tests
         {
             var uri = new Uri(url);
 
-            var resp = _action.ParseSearchUrl(uri);
+            var resp = _action.ParseSearchPageInput(uri);
 
             Assert.True(resp.HasError);
         }
@@ -125,7 +125,7 @@ namespace UrlDot.Tests
         {
             var uri = new Uri(url);
 
-            var resp = _action.ParseOtherUrl(uri);
+            var resp = _action.ParseOtherPageInput(uri);
 
             Assert.NotNull(resp);
         }

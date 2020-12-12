@@ -1,4 +1,6 @@
-﻿using DotUrl.Helpers;
+﻿using Common.Tests.TestData;
+using DotUrl.Helpers;
+using DotUrl.Models;
 using System;
 using Xunit;
 
@@ -24,6 +26,22 @@ namespace Common.Tests
             Assert.Equal(parsedQueryString.Count, paramCount);
         }
 
-        
+        [Theory]
+        [SampleUrlModels]
+        public void DeeplinkGenerator_ShouldReturn_Deeplink(UrlServiceModel urlModel, string deeplink)
+        {
+            var resp = Util.DeeplinkGenerator(urlModel);
+
+            Assert.Equal(resp, deeplink);
+        }
+
+        [Theory]
+        [SampleDeeplinkModels]
+        public void UrlGenerator_ShouldReturn_Url(DeeplinkServiceModel deeplinkMode, string url)
+        {
+            var resp = Util.UrlGenerator(deeplinkMode);
+
+            Assert.Equal(resp, url);
+        }
     }
 }

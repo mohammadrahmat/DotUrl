@@ -10,8 +10,8 @@ namespace DotUrl.Interfaces
         string Execute(string input);
         bool VerifyInput(string input);
         T InputParser(string input);
-        T ParseOtherUrl(Uri uri);
-        T ParseSearchUrl(Uri uri);
-        T ParseProductUrl(Uri uri);
+        T ParseOtherPageInput(Uri uri);
+        T ParseSearchPageInput(Uri uri);
+        T ParseProductPageInput(Uri uri);
     }
 }

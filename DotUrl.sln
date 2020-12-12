@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Tests", "Common.Test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AAB0A75E-8C53-4A83-831E-71B681970908}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeeplinkService.Tests", "DeeplinkService.Tests\DeeplinkService.Tests.csproj", "{36382D7D-58FC-4915-8B68-649308B4D284}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{43BA7A20-A8B7-4DD3-875A-7F26A5AE3383}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43BA7A20-A8B7-4DD3-875A-7F26A5AE3383}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43BA7A20-A8B7-4DD3-875A-7F26A5AE3383}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36382D7D-58FC-4915-8B68-649308B4D284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36382D7D-58FC-4915-8B68-649308B4D284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36382D7D-58FC-4915-8B68-649308B4D284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36382D7D-58FC-4915-8B68-649308B4D284}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{259ED4A2-1F44-4CF7-8E39-233376D1AF1E} = {AAB0A75E-8C53-4A83-831E-71B681970908}
 		{43BA7A20-A8B7-4DD3-875A-7F26A5AE3383} = {AAB0A75E-8C53-4A83-831E-71B681970908}
+		{36382D7D-58FC-4915-8B68-649308B4D284} = {AAB0A75E-8C53-4A83-831E-71B681970908}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F5F4606B-D9A3-4F68-821A-E24AED9C3F20}
