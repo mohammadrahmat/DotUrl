@@ -22,8 +22,8 @@ namespace DotUrl.Controllers
         [HttpGet]
         public string Get()
         {
-            _logger.LogInformation("Health Controller Get Called. Service is alive.");
-            return "Service is alive.";
+            _logger.LogInformation("Health Controller Called. Service is alive.");
+            return "Service is alive. Please use /swagger for endpoints";
         }
     }
 }
