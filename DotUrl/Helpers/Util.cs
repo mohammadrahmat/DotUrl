@@ -5,11 +5,10 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace DotUrl.Helpers
 {
-    public class Util
+    public static class Util
     {
         public static Dictionary<string, string> ParseQueryString(string queryString)
         {

@@ -3,6 +3,8 @@ using DotUrl.Controllers;
 using DotUrl.Interfaces;
 using DotUrl.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Nest;
 using System;
 using UrlService.Tests;
 using UrlService.Tests.TestData;
@@ -10,14 +12,18 @@ using Xunit;
 
 namespace UrlDot.Tests
 {
-    public class UrlServiceTest
+    public class UrlServiceTest : IClassFixture<TestFixture>
     {
+        private readonly ServiceProvider _serviceProvider;
         private readonly IAction<UrlServiceModel> _action;
         private readonly UrlServiceController _controller;
+        private readonly ElasticClient _client;
 
-        public UrlServiceTest()
+        public UrlServiceTest(TestFixture testFixture)
         {
-            _action = new UrlAction();
+            _serviceProvider = testFixture.ServiceProvider;
+            _client = _serviceProvider.GetService<ElasticClient>();
+            _action = new UrlAction(_client);
             _controller = new UrlServiceController(_action);
         }
 
@@ -30,7 +36,7 @@ namespace UrlDot.Tests
         }
 
         [Theory]
-        [SampleUrlServiceTestData]
+        [SampleUrlServiceTestDataAttribute]
         public void ExecuteUrlActionTest(string url, string deeplink)
         {
             var resp = _action.Execute(url);
@@ -39,7 +45,7 @@ namespace UrlDot.Tests
         }
 
         [Theory]
-        [SampleProductUrls]
+        [SampleProductUrlsAttribute]
         public void VerifyInput_CorrectInput_ShouldReturnTrue(string url)
         {   
             var res = _action.VerifyInput(url);
@@ -59,7 +65,7 @@ namespace UrlDot.Tests
         }
 
         [Theory]
-        [SampleUrlServiceTestData]
+        [SampleUrlServiceTestDataAttribute]
         public void ConvertToDeepLink_ShouldReturnDeepLink(string url, string deeplink)
         {
             var resp = _controller.ConvertToDeeplink(url);
@@ -67,7 +73,7 @@ namespace UrlDot.Tests
         }
 
         [Theory]
-        [SampleProductUrls]
+        [SampleProductUrlsAttribute]
         public void InputParser_CorrectInput_ShouldReturnUrlServiceModel(string url)
         {
             var resp = _action.InputParser(url);
@@ -76,7 +82,7 @@ namespace UrlDot.Tests
         }
 
         [Theory]
-        [SampleProductUrls]
+        [SampleProductUrlsAttribute]
         public void ParseProductUrl_CorrectInput_ShouldHaveNoError(string url)
         {
             var uri = new Uri(url);
@@ -87,7 +93,7 @@ namespace UrlDot.Tests
         }
 
         [Theory]
-        [InlineData("https://trendyol.com/tum--urunler/?q=elbise")]
+        [InlineData("http://www.trendyol.com/tum--urunler/?q=elbise")]
         public void ParseProductUrl_IncorrectInput_ShouldHaveError(string url)
         {
             var uri = new Uri(url);
@@ -98,7 +104,7 @@ namespace UrlDot.Tests
         }
 
         [Theory]
-        [SampleSearchUrls]
+        [SampleSearchUrlsAttribute]
         public void ParseSearchUrl_CorrectInput_ShouldHaveNoError(string url)
         {
             var uri = new Uri(url);
@@ -109,7 +115,7 @@ namespace UrlDot.Tests
         }
 
         [Theory]
-        [InlineData("https://trendyol.com/tum--urunler/?t=elbise")]
+        [InlineData("http://www.trendyol.com/tum--urunler/?t=elbise")]
         public void ParseSearchUrl_IncorrectInput_ShouldHaveError(string url)
         {
             var uri = new Uri(url);
@@ -120,7 +126,7 @@ namespace UrlDot.Tests
         }
 
         [Theory]
-        [InlineData("https://trendyol.com/Hesabim/Favoriler")]
+        [InlineData("http://www.trendyol.com/Hesabim/Favoriler")]
         public void ParseOtherUrlTest(string url)
         {
             var uri = new Uri(url);
@@ -128,6 +134,15 @@ namespace UrlDot.Tests
             var resp = _action.ParseOtherPageInput(uri);
 
             Assert.NotNull(resp);
+        }
+
+        [Theory]
+        [SampleSearchUrlsAttribute]
+        public void SearchIndexTest(string url)
+        {
+            var resp = _action.SearchIndex(url);
+            
+            Assert.IsType<string>(resp);
         }
     }
 }

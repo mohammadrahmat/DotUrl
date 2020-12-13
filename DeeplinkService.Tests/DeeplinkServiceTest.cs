@@ -4,19 +4,25 @@ using DotUrl.Controllers;
 using DotUrl.Interfaces;
 using DotUrl.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Nest;
 using System;
 using Xunit;
 
 namespace DeeplinkService.Tests
 {
-    public class DeeplinkServiceTest
+    public class DeeplinkServiceTest : IClassFixture<TestFixture>
     {
+        private readonly ServiceProvider _serviceProvider;
         private readonly IAction<DeeplinkServiceModel> _action;
         private readonly DeeplinkServiceController _controller;
+        private readonly ElasticClient _client;
 
-        public DeeplinkServiceTest()
+        public DeeplinkServiceTest(TestFixture testFixture)
         {
-            _action = new DeeplinkAction();
+            _serviceProvider = testFixture.ServiceProvider;
+            _client = _serviceProvider.GetService<ElasticClient>();
+            _action = new DeeplinkAction(_client);
             _controller = new DeeplinkServiceController(_action);
         }
 
@@ -29,7 +35,7 @@ namespace DeeplinkService.Tests
         }
 
         [Theory]
-        [SampleDeeplinkServiceTestData]
+        [SampleDeeplinkServiceTestDataAttribute]
         public void ExecuteDeeplinkActionTest(string deeplink, string url)
         {
             var resp = _action.Execute(deeplink);
@@ -38,7 +44,7 @@ namespace DeeplinkService.Tests
         }
 
         [Theory]
-        [SampleProductDeeplinks]
+        [SampleProductDeeplinksAttribute]
         public void VerifyInput_CorrectInput_ShouldReturnTrue(string deeplink)
         {
             var res = _action.VerifyInput(deeplink);
@@ -57,7 +63,7 @@ namespace DeeplinkService.Tests
         }
 
         [Theory]
-        [SampleProductDeeplinks]
+        [SampleProductDeeplinksAttribute]
         public void InputParser_CorrectInput_ShouldNotHaveError(string deeplink)
         {
             var verified = _action.VerifyInput(deeplink);
@@ -68,7 +74,7 @@ namespace DeeplinkService.Tests
         }
 
         [Theory]
-        [SampleDeeplinkServiceTestData]
+        [SampleDeeplinkServiceTestDataAttribute]
         public void ConvertToUrl_CorrectInput_ShouldReturnUrl(string deeplink, string url)
         {
             var resp = _controller.ConvertToUrl(deeplink);
@@ -84,11 +90,11 @@ namespace DeeplinkService.Tests
 
             var resp = _action.ParseOtherPageInput(uri);
 
-            Assert.NotNull(deeplink);
+            Assert.NotNull(resp);
         }
 
         [Theory]
-        [SampleSearchDeeplinks]
+        [SampleSearchDeeplinksAttribute]
         public void ParseSearchDeeplinks_CorrectInput_ShouldNotHaveError(string deeplink)
         {
             _action.VerifyInput(deeplink);
@@ -114,7 +120,7 @@ namespace DeeplinkService.Tests
         }
 
         [Theory]
-        [SampleProductDeeplinks]
+        [SampleProductDeeplinksAttribute]
         public void ParseProductDeeplink_CorrectInput_ShouldNotHaveError(string deeplink)
         {
             _action.VerifyInput(deeplink);
@@ -140,7 +146,7 @@ namespace DeeplinkService.Tests
         }
 
         [Theory]
-        [SampleSearchDeeplinks]
+        [SampleSearchDeeplinksAttribute]
         public void ParseSearchDeeplink_CorrectInput_ShouldNotHaveError(string deeplink)
         {
             _action.VerifyInput(deeplink);

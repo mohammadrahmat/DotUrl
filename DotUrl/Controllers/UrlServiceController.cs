@@ -1,18 +1,13 @@
 ﻿using DotUrl.Interfaces;
 using DotUrl.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DotUrl.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class UrlServiceController : Controller
     {
-        private IAction<UrlServiceModel> _action;
+        private readonly IAction<UrlServiceModel> _action;
 
         public UrlServiceController(IAction<UrlServiceModel> action)
         {
@@ -20,12 +15,14 @@ namespace DotUrl.Controllers
         }
 
         [HttpGet]
+        [Route("[controller]/status")]
         public IActionResult Status()
         {
             return Ok();
         }
 
         [HttpPost]
+        [Route("[controller]/convert")]
         public string ConvertToDeeplink(string input)
         {
             return _action.Execute(input);

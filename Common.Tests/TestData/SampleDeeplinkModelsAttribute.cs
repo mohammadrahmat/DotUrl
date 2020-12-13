@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Xunit.Sdk;
 using System.Reflection;
 using DotUrl.Models;
 
 namespace Common.Tests.TestData
 {
-    class SampleDeeplinkModels : DataAttribute
+    class SampleDeeplinkModelsAttribute : DataAttribute
     {
-        public override IEnumerable<object[]> GetData(MethodInfo methodInfo)
+        public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {
             yield return new object[] { new  DeeplinkServiceModel {
                 PageType = PageType.Search,

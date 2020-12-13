@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using Xunit.Sdk;
 
 namespace DeeplinkService.Tests.TestData
 {
-    public class SampleProductDeeplinks : DataAttribute
+    public class SampleProductDeeplinksAttribute : DataAttribute
     {
-        public override IEnumerable<object[]> GetData(MethodInfo methodInfo)
+        public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {
             yield return new object[] { "ty://?Page=Product&ContentId=1925865&CampaignId=439892&MerchantId=105064" };
             yield return new object[] { "ty://?Page=Product&ContentId=1925865" };

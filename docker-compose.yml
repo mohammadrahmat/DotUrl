@@ -1,0 +1,46 @@
+version: '2.1'
+
+services: 
+  #ugh, the network permissions killing me, i will just remove this part and make the app starter
+  #run it from a cli:
+  # doturl:
+  #   container_name: doturl
+  #   command: dotnet run --project ./DotUrl/DotUrl.csproj
+  #   build: .
+  #   ports:
+  #     - "5001:5001"
+  #     - "5000:5000"
+  #   restart: on-failure
+  #   links:
+  #     - elasticsearch
+  #   depends_on: 
+  #     - elasticsearch
+  #   networks:
+  #     - esnetwork
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      - esnetwork
+    
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.3.0
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    networks:
+      - esnetwork
+    depends_on: 
+      - elasticsearch
+volumes: 
+  esdata:
+    driver: local
+networks: 
+  esnetwork:
+    driver: bridge

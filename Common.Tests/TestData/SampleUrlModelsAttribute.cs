@@ -1,15 +1,13 @@
 ﻿using DotUrl.Models;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using Xunit.Sdk;
 
 namespace Common.Tests.TestData
 {
-    class SampleUrlModels : DataAttribute
+    class SampleUrlModelsAttribute : DataAttribute
     {
-        public override IEnumerable<object[]> GetData(MethodInfo methodInfo)
+        public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {
             yield return new object[] { new  UrlServiceModel {
                 PageType = PageType.Search,

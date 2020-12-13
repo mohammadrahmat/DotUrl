@@ -1,6 +1,7 @@
 ﻿using DotUrl.Helpers;
 using DotUrl.Interfaces;
 using DotUrl.Models;
+using Nest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,24 @@ namespace DotUrl.Actions
     public class DeeplinkAction : IAction<DeeplinkServiceModel>
     {
         private Dictionary<string, string> _parsedQueryString;
+        private readonly ElasticClient _client;
+
+        public DeeplinkAction(ElasticClient client)
+        {
+            _client = client;
+        }
 
         public string Execute(string input)
         {
             if (!VerifyInput(input))
             {
                 return "Invalid Input";
+            }
+
+            var searchedResponse = SearchIndex(input);
+            if (!string.IsNullOrEmpty(searchedResponse))
+            {
+                return searchedResponse;
             }
 
             var parsedInput = InputParser(input);
@@ -27,6 +40,8 @@ namespace DotUrl.Actions
             {
                 return parsedInput.ErrorDetails;
             }
+
+            Task.Run(() => IndexRequest(parsedInput));
 
             return parsedInput.Response;
         }
@@ -131,6 +146,33 @@ namespace DotUrl.Actions
             }
 
             return false;
+        }
+
+        public async Task IndexRequest(DeeplinkServiceModel serviceModel)
+        {
+            await _client.IndexDocumentAsync(serviceModel);
+        }
+
+        public string SearchIndex(string input)
+        {
+            var resp = string.Empty;
+            var search = _client.Search<BaseServiceModel>(s => s
+                .Query(q => q
+                    .Match(m => m
+                        .Field(f => f.Request)
+                        .Query(input)
+                    )
+                 )
+                .Take(10)
+            );
+
+            if (search.Hits.Count > 0)
+            {
+                var docs = search.Documents.Where(d => d.Request == input);
+                resp = docs.Any() ? docs.First().Response : string.Empty;
+            }
+
+            return resp;
         }
     }
 }
