@@ -48,3 +48,4 @@ Things to do in the future if had the chance and time:
 - Fix the docker-compose network issue when trying to run the app using multi stage build
 - Set environment variables, after the above 2 were done
 - Maybe store data such as product name, category, etc and use it to make better urls
+- Uhhh, didn't realize i did not group test projects under a folder, should do that!
